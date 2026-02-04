@@ -5,109 +5,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valentine's Request</title>
     <style>
-        /* CSS Styles */
-        body, html {
+        body {
             margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-
-        .valentine-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            width: 100%;
-            text-align: center;
+            font-family: 'Arial', sans-serif;
             background-color: #ffdae0;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 20 20'%3E%3Cpath d='M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.78 7.77L10 18.78l8.39-8.4a5.5 5.5 0 0 0-7.78-7.77l-.61.61z' fill='%23ff4d6d' fill-opacity='0.2'/%3E%3C/svg%3E");
-            font-family: "Arial", sans-serif;
-            padding: 20px;
-            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
         }
 
-        .question {
+        #app {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .img-container img {
+            max-width: 250px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
             color: #d00000;
-            font-size: 2rem;
+            font-size: 24px;
             margin: 20px 0;
-            text-shadow: 2px 2px white;
         }
 
         .buttons {
             display: flex;
-            flex-wrap: wrap;
-            align-items: center;
             justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
+            align-items: center;
+            gap: 15px;
         }
 
-        .yesButton {
+        button {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+        #yesBtn {
             background-color: #4caf50;
             color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.2s;
         }
 
-        .noButton {
+        #noBtn {
             background-color: #f44336;
             color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
         }
 
-        img {
-            max-width: 300px;
-            width: 100%;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        .success-text {
+            color: #ff4d6d;
+            font-size: 32px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <div class="valentine-container" id="app"></div>
+    <div id="app">
+        <div class="img-container">
+            <img id="mainGif" src="https://media.tenor.com/al46ByEThpYAAAAi/milk-and-mocha-bear-hearts.gif" alt="bears">
+        </div>
+        <h1 id="question">Θέλεις να βγούμε ραντεβού; ❤️</h1>
+        <div class="buttons" id="btnGroup">
+            <button id="yesBtn" onclick="celebrate()">Ναι</button>
+            <button id="noBtn" onclick="handleNo()">Όχι</button>
+        </div>
+    </div>
 
     <script>
         let noCount = 0;
-        const phrases = ["Όχι", "Είσαι σίγουρη;", "Μήπως να το ξανασκεφτείς;", "Σίγουρα σίγουρα;", "Μην μου το κάνεις αυτό...", "Θα κλάψω!", "Πάτα το Ναιιιι"];
-        
+        const phrases = [
+            "Όχι", 
+            "Είσαι σίγουρη;", 
+            "Μήπως να το ξανασκεφτείς;", 
+            "Σίγουρα σίγουρα;", 
+            "Μην μου το κάνεις αυτό...", 
+            "Θα κλάψω! 😢", 
+            "Πάτα το Ναιιιι"
+        ];
+
         function handleNo() {
             noCount++;
-            render();
-        }
-
-        function handleYes() {
-            document.getElementById('app').innerHTML = `
-                <img src="https://media.tenor.com/gU66z9fhzYIAAAAi/bear-kiss-bear-cute.gif" alt="Success">
-                <div style="color: #ff4d6d; font-size: 2.5rem; font-weight: bold; margin-top: 20px;">Γιούπιιι! ❤️</div>
-            `;
-        }
-
-        function render() {
-            const container = document.getElementById('app');
-            const yesSize = noCount * 20 + 16; // Μεγαλώνει το Ναι
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
             
-            container.innerHTML = `
-                <img src="https://media.tenor.com/al46ByEThpYAAAAi/milk-and-mocha-bear-hearts.gif" alt="Hearts">
-                <div class="question">Θέλεις να βγούμε ραντεβού;</div>
-                <div class="buttons">
-                    <button class="yesButton" style="font-size: ${yesSize}px" onclick="handleYes()">Ναι</button>
-                    <button class="noButton" onclick="handleNo()">${phrases[Math.min(noCount, phrases.length - 1)]}</button>
-                </div>
-            `;
+            // Αλλαγή κειμένου στο Όχι
+            noBtn.innerText = phrases[Math.min(noCount, phrases.length - 1)];
+            
+            // Μεγέθυνση του Ναι
+            const newSize = 16 + (noCount * 15);
+            yesBtn.style.fontSize = newSize + "px";
+            yesBtn.style.padding = (10 + noCount * 5) + "px " + (25 + noCount * 10) + "px";
         }
 
-        // Αυτή η γραμμή έλειπε: Ξεκινάει την εμφάνιση!
-        render();
+        function celebrate() {
+            const app = document.getElementById('app');
+            app.innerHTML = `
+                <div class="img-container">
+                    <img src="https://media.tenor.com/gU66z9fhzYIAAAAi/bear-kiss-bear-cute.gif" alt="kiss">
+                </div>
+                <div class="success-text">Γιούπιιιι! Ραντεβού τότε! ❤️🥰</div>
+            `;
+        }
     </script>
 </body>
 </html>
